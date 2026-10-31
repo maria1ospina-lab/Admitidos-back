@@ -1,0 +1,4 @@
+$kind: http-request
+url: "{{Base_URL}}/facultades/show"
+method: GET
+order: 3000

@@ -1,0 +1,4 @@
+$kind: http-request
+url: "{{Base_URL}}/facultades/store"
+method: GET
+order: 2985
