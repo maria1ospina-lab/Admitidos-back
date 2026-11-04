@@ -1,4 +1,8 @@
 $kind: http-request
-url: "{{Base_URL}}/facultades/store"
-method: GET
-order: 2985
+name: Crear facultad
+url: "{{base_url}}/facultades/store"
+method: POST
+body:
+  type: json
+  content: "{\r\n  \"name\": \"Facultad de prueba\"\r\n}"
+order: 3000

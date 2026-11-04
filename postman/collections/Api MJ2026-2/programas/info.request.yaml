@@ -1,4 +1,5 @@
 $kind: http-request
-url: ""
+name: Obtener programa por ID
+url: "{{base_url}}/programas/info/{{id}}"
 method: GET
 order: 2000

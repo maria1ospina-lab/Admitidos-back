@@ -1,4 +1,8 @@
-name: New Environment
+name: Admitidos-back Local
 values:
-  - key: Base_URL
-    value: ''
+  - key: base_url
+    value: 'http://localhost:3000/api'
+    enabled: true
+  - key: id
+    value: '1'
+    enabled: true

@@ -1,0 +1,8 @@
+$kind: http-request
+name: Actualizar programa
+url: "{{base_url}}/programas/update/{{id}}"
+method: PUT
+body:
+  type: json
+  content: "{\r\n  \"name\": \"Programa actualizado\"\r\n}"
+order: 4000
