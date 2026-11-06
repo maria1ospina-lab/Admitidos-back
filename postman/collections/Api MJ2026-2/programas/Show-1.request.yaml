@@ -1,5 +1,5 @@
 $kind: http-request
-name: Listar programas
+name: Show
 url: "{{base_url}}/programas/show"
 method: GET
 order: 1000

@@ -1,39 +1,26 @@
-import db from '../../config/database.js';
+import Programa from "./programas.model.js";
 
 export async function listarProgramas() {
-  const [rows] = await db.query(`SELECT 
-                                        *
-                                         FROM programas
-                                        ORDER BY nombre ASC`);
-  return rows;
+  return await Programa.find().populate("facultad").sort({ nombre: 1 });
 }
 
 export async function obtenerProgramaPorId(id) {
-  const [rows] = await db.query(`SELECT 
-                                        *
-                                         FROM programas
-                                        WHERE id = ?`, [id]);
-  return rows[0];
+  return await Programa.findById(id).populate("facultad");
 }
 
-export async function crearPrograma(nombre) {
-  const [result] = await db.query(`INSERT INTO programas (nombre) 
-                                   VALUES (?)`, [nombre]);
-  return result.insertId;
+export async function crearPrograma(datos) {
+  return await Programa.create(datos);
 }
 
-export async function actualizarPrograma(id, nombre) {
-  await db.execute(`UPDATE programas SET nombre = ? WHERE id = ?`, [nombre, id]);
-
-  return obtenerProgramaPorId(id);
+export async function actualizarPrograma(id, datos) {
+  return await Programa.findByIdAndUpdate(id, datos, {
+    returnDocument: "after", //Devuelve programas ya actualizado 
+    runValidators: true,
+   });
 }
 
 export async function eliminarPrograma(id) {
-
-  const [result] =
-  await db.execute(`DELETE FROM programas WHERE id = ?`, [id]);
-
-  return (
-      result.affectedRows > 0
-  );
+  const eliminada = await Programa.findByIdAndDelete(id);
+  return eliminada !== null;
 }
+

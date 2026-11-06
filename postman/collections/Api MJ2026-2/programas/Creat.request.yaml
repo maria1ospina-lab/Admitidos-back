@@ -1,8 +1,11 @@
 $kind: http-request
-name: Crear programa
 url: "{{base_url}}/programas/store"
 method: POST
 body:
   type: json
-  content: "{\r\n  \"name\": \"Programa de prueba\"\r\n}"
+  content: "{\r
+
+    \  \"name\": \"Programa de prueba\"\r
+
+    }"
 order: 3000

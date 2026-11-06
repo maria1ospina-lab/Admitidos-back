@@ -1,8 +1,12 @@
 $kind: http-request
-name: Actualizar facultad
+name: Update
 url: "{{base_url}}/facultades/update/{{id}}"
 method: PUT
 body:
   type: json
-  content: "{\r\n  \"name\": \"Facultad actualizada\"\r\n}"
+  content: "{\r
+
+    \  \"name\": \"Facultad actualizada\"\r
+
+    }"
 order: 4000

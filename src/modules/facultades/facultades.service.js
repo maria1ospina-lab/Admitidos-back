@@ -1,45 +1,25 @@
-import db from '../../config/database.js';
+import Facultad from "./facultades.model.js";
 
 export async function listarFacultades() {
-  const [rows] = await db.query(`SELECT 
-                                        id,
-                                        name,
-                                        created_at AS createdAt,
-                                        updated_at AS updatedAt
-                                         FROM facultades
-                                        ORDER BY name ASC`);
-  return rows;
-}
+  return await Facultad.find().sort({ nombre: 1 });
+}  
 
 export async function obtenerFacultadPorId(id) {
-  const [rows] = await db.query(`SELECT 
-                                        id,
-                                        name,
-                                        created_at AS createdAt,
-                                        updated_at AS updatedAt
-                                         FROM facultades
-                                        WHERE id = ?`, [id]);
-  return rows[0];
+  return await Facultad.findById(id);
 }
 
 export async function crearFacultad(nombre) {
-  const [result] = await db.query(`INSERT INTO facultades (name) 
-                                   VALUES (?)`, [nombre]);
-  return result.insertId;
+  return await Facultad.create({ nombre });
 }
 
 export async function actualizarFacultad(id, nombre) {
-  await db.execute(`UPDATE facultades SET name = ? WHERE id = ?`, [nombre, id]);
-
-  return obtenerFacultadPorId(id);
+  return await Facultad.findByIdAndUpdate(id,
+    {nombre},
+    {returnDocument: "after", runValidators: true}
+  );
 }
 
 export async function eliminarFacultad(id) {
-
-  const [result] =
-  await db.execute(`DELETE FROM facultades WHERE id = ?`, [id]);
-
-  return (
-      result.affectedRows > 0
-  );
-}
+  const eliminada = await Facultad.findByIdAndDelete(id);
+  return eliminada !== null;
+} 

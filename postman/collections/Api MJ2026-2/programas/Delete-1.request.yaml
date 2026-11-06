@@ -1,5 +1,5 @@
 $kind: http-request
-name: Eliminar programa
+name: Delete
 url: "{{base_url}}/programas/delete/{{id}}"
 method: DELETE
 order: 5000

@@ -1,5 +1,4 @@
 $kind: http-request
-name: Listar facultades
 url: "{{base_url}}/facultades/show"
 method: GET
 order: 1000

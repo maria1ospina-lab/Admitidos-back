@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import * as programasService from "./programas.service.js";
 
 export async function obtenerProgramas(req, res) {
@@ -21,12 +22,10 @@ export async function obtenerProgramas(req, res) {
   }
 }
 
-
-
 export async function obtenerProgramaPorId(req, res) {
-  const id = Number(req.params.id);
+  const { id } = req.params;
 
-  if (!Number.isInteger(id) || id <= 0) {
+  if (!mongoose.isValidObjectId(id)) {
     return res.status(400).json({
       statusCode: 400,
       success: false,
@@ -63,19 +62,11 @@ export async function obtenerProgramaPorId(req, res) {
 }
 
 export async function crearPrograma(req, res) {
-  const { name } = req.body ?? {};
+  const { name, codigo, facultad } = req.body ?? {};
 
-  if (typeof name !== "string" || name.trim().length === 0) {
-    return res.status(400).json({
-      statusCode: 400,
-      success: false,
-      message: "El campo 'name' es obligatorio y debe ser texto",
-    });
-  }
-
-  const nombre = name.trim();
-
-  if (nombre.length < 3 || nombre.length > 150) {
+  if (
+    typeof name !== "string" || name.trim().length < 3 || name.trim().length > 150
+  ) {
     return res.status(400).json({
       statusCode: 400,
       success: false,
@@ -83,14 +74,36 @@ export async function crearPrograma(req, res) {
     });
   }
 
+  if (
+    typeof codigo !== "string" || codigo.trim().length < 2 || codigo.trim().length > 20
+  ) {
+    return res.status(400).json({
+      statusCode: 400,
+      success: false,
+      message: "El campo 'codigo' debe tener entre 2 y 20 caracteres",
+    });
+  }
+
+  if (!mongoose.isValidObjectId(facultad)) {
+    return res.status(400).json({
+      statusCode: 400,
+      success: false,
+      message: "El campo 'facultad' debe contener un ID válido",
+    });
+  }
+
   try {
-    const programaId = await programasService.crearPrograma(nombre);
+    const programa = await programasService.crearPrograma({
+      nombre: name.trim(),
+      codigo: codigo.trim(),
+      facultad,
+    });
 
     return res.status(201).json({
       statusCode: 201,
       success: true,
       message: "Programa creado correctamente",
-      data: { id: programaId, name: nombre },
+      data: programa,
     });
   } catch (error) {
     console.error("Error al crear el programa:", error);
@@ -104,10 +117,10 @@ export async function crearPrograma(req, res) {
 }
 
 export async function actualizarPrograma(req, res) {
-  const id = Number(req.params.id);
-  const { name } = req.body ?? {};
+  const { id } = req.params;
+  const { name, codigo, facultad } = req.body ?? {};
 
-  if (!Number.isInteger(id) || id <= 0) {
+  if (!mongoose.isValidObjectId(id)) {
     return res.status(400).json({
       statusCode: 400,
       success: false,
@@ -115,21 +128,31 @@ export async function actualizarPrograma(req, res) {
     });
   }
 
-  if (typeof name !== "string" || name.trim().length === 0) {
-    return res.status(400).json({
-      statusCode: 400,
-      success: false,
-      message: "El campo 'name' es obligatorio y debe ser texto",
-    });
-  }
-
-  const nombre = name.trim();
-
-  if (nombre.length < 3 || nombre.length > 150) {
+  if (
+    typeof name !== "string" || name.trim().length < 3 || name.trim().length > 150
+  ) {
     return res.status(400).json({
       statusCode: 400,
       success: false,
       message: "El campo 'name' debe tener entre 3 y 150 caracteres",
+    });
+  }
+
+  if (
+    typeof codigo !== "string" || codigo.trim().length < 2 || codigo.trim().length > 20
+  ) {
+    return res.status(400).json({
+      statusCode: 400,
+      success: false,
+      message: "El campo 'codigo' debe tener entre 2 y 20 caracteres",
+    });
+  }
+
+  if (!mongoose.isValidObjectId(facultad)) {
+    return res.status(400).json({
+      statusCode: 400,
+      success: false,
+      message: "El campo 'facultad' debe contener un ID válido",
     });
   }
 
@@ -144,7 +167,11 @@ export async function actualizarPrograma(req, res) {
       });
     }
 
-    const programa = await programasService.actualizarPrograma(id, nombre);
+    const programa = await programasService.actualizarPrograma(id, {
+      nombre: name.trim(),
+      codigo: codigo.trim(),
+      facultad,
+    });
 
     return res.status(200).json({
       statusCode: 200,
@@ -164,9 +191,9 @@ export async function actualizarPrograma(req, res) {
 }
 
 export async function eliminarPrograma(req, res) {
-  const id = Number(req.params.id);
+  const { id } = req.params;
 
-  if (!Number.isInteger(id) || id <= 0) {
+  if (!mongoose.isValidObjectId(id)) {
     return res.status(400).json({
       statusCode: 400,
       success: false,
@@ -185,13 +212,13 @@ export async function eliminarPrograma(req, res) {
       });
     }
 
-    const programa = await programasService.eliminarPrograma(id);
+    await programasService.eliminarPrograma(id);
 
     return res.status(200).json({
       statusCode: 200,
       success: true,
       message: "Programa eliminado correctamente",
-      data: programa,
+      data: programaActual,
     });
   } catch (error) {
     console.error("Error al eliminar el programa:", error);

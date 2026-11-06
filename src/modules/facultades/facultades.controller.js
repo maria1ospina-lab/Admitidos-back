@@ -1,4 +1,5 @@
 import * as FacultadesService from "./facultades.service.js";
+import mongoose from "mongoose";
 
 export async function obtenerFacultades(req, res) {
   try {
@@ -22,9 +23,9 @@ export async function obtenerFacultades(req, res) {
 }
 
 export async function obtenerFacultadPorId(req, res) {
-  const id = Number(req.params.id);
+  const id = req.params.id
 
-  if (!Number.isInteger(id) || id <= 0) {
+  if (!mongoose.isValidObjectId(id) || id <= 0) {
     return res.status(400).json({
       statusCode: 400,
       success: false,
@@ -102,10 +103,10 @@ export async function crearFacultad(req, res) {
 }
 
 export async function actualizarFacultad(req, res) {
-  const id = Number(req.params.id);
+  const id = req.params.id
   const { name } = req.body ?? {};
 
-  if (!Number.isInteger(id) || id <= 0) {
+  if (!mongoose.isValidObjectId(id) || id <= 0) {
     return res.status(400).json({
       statusCode: 400,
       success: false,
@@ -162,9 +163,9 @@ export async function actualizarFacultad(req, res) {
 }
 
 export async function eliminarFacultad(req, res) {
-  const id = Number(req.params.id);
+  const id = req.params.id
 
-  if (!Number.isInteger(id) || id <= 0) {
+  if (!mongoose.isValidObjectId(id) || id <= 0) {
     return res.status(400).json({
       statusCode: 400,
       success: false,

@@ -1,5 +1,5 @@
 $kind: http-request
-name: Obtener facultad por ID
+name: Info
 url: "{{base_url}}/facultades/info/{{id}}"
 method: GET
 order: 2000
